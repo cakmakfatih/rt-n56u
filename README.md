@@ -31,7 +31,7 @@ The guide also explains how to change the upstream router, SSID, password, or ma
 
 ## Verified status
 
-Wireless Internet to a phone, driver load/unload tests, permanent installation, and a separate normal reboot passed on the tested unit. Both AP names and all four LAN bridge members were verified. Physical downstream Ethernet forwarding and separate phone tests on each band have not yet been validated.
+Wireless Internet to a phone, driver load/unload tests, permanent installation, and a separate normal reboot passed on the tested unit. Both AP names and all four LAN bridge members were verified. The owner also confirmed Internet access from an Ethernet-connected client. Separate phone tests on each band have not yet been validated.
 
 ## About this fork and upstream
 
