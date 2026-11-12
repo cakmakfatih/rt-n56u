@@ -4,6 +4,10 @@
 
 # README #
 
+## ZTE H267A TRT29 wireless bridge
+
+This fork includes an MT7603 APCLI driver port for the ZTE ZXHN H267A running V1.0.1_TRT29. See the [H267A installation and network-change guide](docs/H267A_TRT29_wireless_bridge_guide.md) for the verified build, installation, reboot checks, and later SSID/password changes.
+
 Welcome to the rt-n56u project
 
 This project aims to improve the rt-n56u and other supported devices on the software part, allowing power user to take full control over their hardware.

@@ -4,5 +4,5 @@
   "kernel": "2.6.36 with measured CSP network ABI overlay",
   "compiler": "MIPS big-endian GCC 4.3.6",
   "private_calibration_required": true,
-  "guide": "Kept outside this repository as requested"
+  "guide": "../docs/H267A_TRT29_wireless_bridge_guide.md"
 }
