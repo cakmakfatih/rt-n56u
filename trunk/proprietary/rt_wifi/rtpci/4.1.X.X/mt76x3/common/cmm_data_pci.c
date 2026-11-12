@@ -361,8 +361,8 @@ USHORT RtmpPCI_WriteSingleTxResource(
 #ifdef RT_BIG_ENDIAN
 	TXD_STRUC *pDestTxD;
 	UCHAR tx_hw_info[TXD_SIZE];
-	UINT8 *temp;
 #if defined(RTMP_MAC) || defined(RLT_MAC)
+	UINT8 *temp;
 	UINT tx_hw_hdr_len = pAd->chipCap.tx_hw_hdr_len; // TXWISize + TSO_SIZE
 #endif /* defined(RTMP_MAC) || defined(RLT_MAC) */
 #endif
@@ -892,7 +892,10 @@ BOOLEAN RTMPFreeTXDUponTxDmaDone(
 #endif
 	PNDIS_PACKET pPacket;
 	UCHAR FREE = 0;
-	TXD_STRUC TxD, *pOriTxD;
+	TXD_STRUC *pOriTxD;
+#ifndef RT_BIG_ENDIAN
+	TXD_STRUC TxD;
+#endif
 	BOOLEAN bReschedule = FALSE;
 	//UINT8 TXWISize = pAd->chipCap.TXWISize;
 

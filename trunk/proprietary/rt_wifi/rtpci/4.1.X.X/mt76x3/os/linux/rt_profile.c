@@ -55,19 +55,19 @@
 
 #if defined(CONFIG_SUPPORT_OPENWRT)
 #define FIRST_EEPROM_FILE_PATH	"/etc/wireless/mt7603e/mt7603.eeprom.dat"
-#define FIRST_AP_PROFILE_PATH		"/etc/wireless/mt7603e/mt7603.dat"
+#define FIRST_AP_PROFILE_PATH		"/tmp/h267a-apcli-test.dat"
 #else
 #define FIRST_EEPROM_FILE_PATH	"/etc_ro/Wireless/RT2860/"
-#define FIRST_AP_PROFILE_PATH		"/etc/Wireless/RT2860/RT2860AP.dat"
+#define FIRST_AP_PROFILE_PATH		"/tmp/h267a-apcli-test.dat"
 #endif
 #define FIRST_CHIP_ID	xdef_to_str(CONFIG_RT_FIRST_CARD)
 
 #if defined(CONFIG_SUPPORT_OPENWRT)
 #define SECOND_EEPROM_FILE_PATH	"/etc/wireless/mt7603e/mt7603.eeprom.dat"
-#define SECOND_AP_PROFILE_PATH		"/etc/wireless/mt7603e/mt7603.dat"
+#define SECOND_AP_PROFILE_PATH		"/tmp/h267a-apcli-test.dat"
 #else
 #define SECOND_EEPROM_FILE_PATH	"/etc_ro/Wireless/iNIC/"
-#define SECOND_AP_PROFILE_PATH	"/etc/Wireless/iNIC/iNIC_ap.dat"
+#define SECOND_AP_PROFILE_PATH	"/tmp/h267a-apcli-test.dat"
 #endif
 #define SECOND_CHIP_ID	xdef_to_str(CONFIG_RT_SECOND_CARD)
 

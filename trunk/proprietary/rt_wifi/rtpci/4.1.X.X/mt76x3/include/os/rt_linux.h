@@ -149,16 +149,16 @@ typedef struct usb_ctrlrequest devctrlrequest;
 #ifdef CONFIG_AP_SUPPORT
 #ifdef RTMP_MAC_PCI
 #if CONFIG_RTPCI_AP_RF_OFFSET == 0x48000
-#define AP_PROFILE_PATH			"/etc/Wireless/iNIC/iNIC_ap.dat"
+#define AP_PROFILE_PATH			"/tmp/h267a-apcli-test.dat"
 #define AP_RTMP_FIRMWARE_FILE_NAME "/etc_ro/Wireless/iNIC/RT2860AP.bin"
 #else
 
 #if defined(CONFIG_RT_FIRST_IF_MT7603E) || defined(CONFIG_RT_SECOND_IF_MT7603E)
 //for SDK's PATH
-#define AP_PROFILE_PATH			"/etc/Wireless/RT2860/RT2860AP.dat"
+#define AP_PROFILE_PATH			"/tmp/h267a-apcli-test.dat"
 #else
 //for PC's PATH
-#define AP_PROFILE_PATH			"/etc/Wireless/RT2860AP/RT2860AP.dat"
+#define AP_PROFILE_PATH			"/tmp/h267a-apcli-test.dat"
 #endif
 #define AP_RTMP_FIRMWARE_FILE_NAME "/etc/Wireless/RT2860AP/RT2860AP.bin"
 

@@ -1,0 +1,49 @@
+/* Layout checks are derived from the saved TRT29 kernel, not vermagic. */
+#ifndef H267A_TRT29_ABI_CONTRACT_H
+#define H267A_TRT29_ABI_CONTRACT_H
+typedef char trt29_netdev_size[(sizeof(struct net_device)) == 992 ? 1 : -1];
+typedef char trt29_netdev_private[(ALIGN(sizeof(struct net_device),NETDEV_ALIGN)) == 992 ? 1 : -1];
+typedef char trt29_netdev_ops[(offsetof(struct net_device,netdev_ops)) == 308 ? 1 : -1];
+typedef char trt29_netdev_ethtool[(offsetof(struct net_device,ethtool_ops)) == 312 ? 1 : -1];
+typedef char trt29_netdev_address[(offsetof(struct net_device,dev_addr)) == 464 ? 1 : -1];
+typedef char trt29_netdev_tx[(offsetof(struct net_device,_tx)) == 576 ? 1 : -1];
+typedef char trt29_netdev_device[(offsetof(struct net_device,dev)) == 688 ? 1 : -1];
+typedef char trt29_netdev_groups[(offsetof(struct net_device,sysfs_groups)) == 864 ? 1 : -1];
+typedef char trt29_queue_size[(sizeof(struct netdev_queue)) == 192 ? 1 : -1];
+typedef char trt29_queue_state[(offsetof(struct netdev_queue,state)) == 80 ? 1 : -1];
+typedef char trt29_ops_size[(sizeof(struct net_device_ops)) == 140 ? 1 : -1];
+typedef char trt29_ops_open[(offsetof(struct net_device_ops,ndo_open)) == 8 ? 1 : -1];
+typedef char trt29_ops_stop[(offsetof(struct net_device_ops,ndo_stop)) == 12 ? 1 : -1];
+typedef char trt29_ops_xmit[(offsetof(struct net_device_ops,ndo_start_xmit)) == 16 ? 1 : -1];
+typedef char trt29_ops_ioctl[(offsetof(struct net_device_ops,ndo_do_ioctl)) == 40 ? 1 : -1];
+typedef char trt29_ops_stats64[(offsetof(struct net_device_ops,ndo_get_stats64)) == 60 ? 1 : -1];
+typedef char trt29_ops_stats[(offsetof(struct net_device_ops,ndo_get_stats)) == 64 ? 1 : -1];
+typedef char trt29_stats_size[(sizeof(struct net_device_stats)) == 112 ? 1 : -1];
+typedef char trt29_stats_collisions[(offsetof(struct net_device_stats,collisions)) == 56 ? 1 : -1];
+typedef char trt29_stats64_size[(sizeof(struct rtnl_link_stats64)) == 224 ? 1 : -1];
+typedef char trt29_stats64_collisions[(offsetof(struct rtnl_link_stats64,collisions)) == 112 ? 1 : -1];
+typedef char trt29_shared_dataref[(offsetof(struct skb_shared_info,dataref)) == 36 ? 1 : -1];
+typedef char trt29_shared_frags[(offsetof(struct skb_shared_info,frags)) == 44 ? 1 : -1];
+typedef char trt29_shared_alloc[(SKB_DATA_ALIGN(sizeof(struct skb_shared_info))) == 192 ? 1 : -1];
+typedef char trt29_skb_size[(sizeof(struct sk_buff)) == 208 ? 1 : -1];
+typedef char trt29_skb_sk[(offsetof(struct sk_buff,sk)) == 20 ? 1 : -1];
+typedef char trt29_skb_tstamp[(offsetof(struct sk_buff,tstamp)) == 8 ? 1 : -1];
+typedef char trt29_skb_dev[(offsetof(struct sk_buff,dev)) == 24 ? 1 : -1];
+typedef char trt29_skb_cb[(offsetof(struct sk_buff,cb)) == 32 ? 1 : -1];
+typedef char trt29_skb__skb_refdst[(offsetof(struct sk_buff,_skb_refdst)) == 80 ? 1 : -1];
+typedef char trt29_skb_len[(offsetof(struct sk_buff,len)) == 84 ? 1 : -1];
+typedef char trt29_skb_data_len[(offsetof(struct sk_buff,data_len)) == 88 ? 1 : -1];
+typedef char trt29_skb_protocol[(offsetof(struct sk_buff,protocol)) == 106 ? 1 : -1];
+typedef char trt29_skb_priority[(offsetof(struct sk_buff,priority)) == 100 ? 1 : -1];
+typedef char trt29_skb_tail[(offsetof(struct sk_buff,tail)) == 180 ? 1 : -1];
+typedef char trt29_skb_end[(offsetof(struct sk_buff,end)) == 184 ? 1 : -1];
+typedef char trt29_skb_head[(offsetof(struct sk_buff,head)) == 188 ? 1 : -1];
+typedef char trt29_skb_data[(offsetof(struct sk_buff,data)) == 192 ? 1 : -1];
+typedef char trt29_skb_truesize[(offsetof(struct sk_buff,truesize)) == 196 ? 1 : -1];
+typedef char trt29_skb_users[(offsetof(struct sk_buff,users)) == 200 ? 1 : -1];
+typedef char trt29_hwaddr_type[(offsetof(struct netdev_hw_addr,type)) == 40 ? 1 : -1];
+typedef char trt29_hwaddr_synced[(offsetof(struct netdev_hw_addr,synced)) == 41 ? 1 : -1];
+typedef char trt29_hwaddr_global[(offsetof(struct netdev_hw_addr,global_use)) == 42 ? 1 : -1];
+typedef char trt29_hwaddr_refcount[(offsetof(struct netdev_hw_addr,refcount)) == 44 ? 1 : -1];
+typedef char trt29_hwaddr_size[(sizeof(struct netdev_hw_addr)) == 56 ? 1 : -1];
+#endif

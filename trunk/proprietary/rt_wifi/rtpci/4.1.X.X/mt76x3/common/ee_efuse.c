@@ -1244,7 +1244,9 @@ VOID eFuseGetFreeBlockCount(IN PRTMP_ADAPTER pAd,
 INT eFuse_init(RTMP_ADAPTER *pAd)
 {
 	UINT EfuseFreeBlock=0;
+#ifdef CAL_FREE_IC_SUPPORT
 	BOOLEAN bCalFree;
+#endif
 
 	/*RT3572 means 3062/3562/3572*/
 	/*3593 means 3593*/

@@ -67,9 +67,7 @@ rt2860_interrupt(int irq, void *dev_instance, struct pt_regs *regs)
 {
 	struct net_device *net_dev = (struct net_device *) dev_instance;
 	VOID *pAd = NULL;
-#ifdef MULTI_CORE_SUPPORT
-	unsigned long flags=0;
-#endif /* MULTI_CORE_SUPPORT */
+
 
 	GET_PAD_FROM_NET_DEV(pAd, net_dev);
 

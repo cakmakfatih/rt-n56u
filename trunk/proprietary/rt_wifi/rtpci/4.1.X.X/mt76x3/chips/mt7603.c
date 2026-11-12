@@ -1017,6 +1017,7 @@ static const RTMP_CHIP_CAP MT7603_ChipCap = {
 	.fw_header_image = MT7603_FirmwareImage,
 	.fw_len = sizeof(MT7603_FirmwareImage),
 #endif /* MT7603_E1 */
+	.load_code_method = HEADER_METHOD,
 	.fw_bin_file_name = "mtk/MT7603.bin",
 #ifdef CARRIER_DETECTION_SUPPORT
 	.carrier_func = TONE_RADAR_V2,

@@ -530,8 +530,8 @@ ifeq ($(OSABL),YES)
 	cp -f $(RT28xx_DIR)/os/linux/$(MODULE)_ap_net.ko /tftpboot
 endif
 else
-	rm -f os/linux/$(MODULE)_ap.ko.lzma
-	/root/bin/lzma e os/linux/$(MODULE)_ap.ko os/linux/$(MODULE)_ap.ko.lzma
+	@true
+	@echo "Plain .ko retained for analysis; LZMA packaging skipped"
 endif
 else	
 ifeq ($(RT28xx_MODE),APSTA)

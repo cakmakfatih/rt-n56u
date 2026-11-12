@@ -3621,8 +3621,8 @@ VOID RTMPIoctlGetSTAT2(
 		pMbss=&pAd->ApCfg.MBSSID[apidx];
 		
 		sprintf(msg+strlen(msg),"ra%d\n",apidx);
-		sprintf(msg+strlen(msg),"bytesTx = %ld\n",(pMbss->TransmittedByteCount));
-		sprintf(msg+strlen(msg),"bytesRx = %ld\n",(pMbss->ReceivedByteCount));
+		sprintf(msg+strlen(msg),"bytesTx = %llu\n",(unsigned long long)pMbss->TransmittedByteCount);
+		sprintf(msg+strlen(msg),"bytesRx = %llu\n",(unsigned long long)pMbss->ReceivedByteCount);
 		sprintf(msg+strlen(msg),"pktsTx = %ld\n",pMbss->TxCount);
 		sprintf(msg+strlen(msg),"pktsRx = %ld\n",pMbss->RxCount);
 		sprintf(msg+strlen(msg),"errorsTx = %ld\n",pMbss->TxErrorCount);

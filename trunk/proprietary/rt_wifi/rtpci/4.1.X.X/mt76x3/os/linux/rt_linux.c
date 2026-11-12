@@ -36,6 +36,7 @@
 #include "rt_os_util.h"
 #include "dot11i_wpa.h"
 #include <linux/rtnetlink.h>
+#include "../../h267a_trt29_abi_contract.h"
 
 #ifdef WIFI_DIAG
 #include "diag.h"
@@ -1755,6 +1756,11 @@ PNET_DEV RtmpOSNetDevCreate(
 	struct net_device_ops *pNetDevOps = NULL;
 #endif
 	int status;
+	int name_start = devNum;
+
+	/* OEM wlan1 is public Wi-Fi; register APCLI with its private LAN name. */
+	if (devType == INT_APCLI && strcmp(pNamePrefix, "wlan") == 0)
+		name_start += 2;
 
 	/* allocate a new network device */
 	status = RtmpOSNetDevAlloc(&pNetDev, privMemSize);
@@ -1775,7 +1781,7 @@ PNET_DEV RtmpOSNetDevCreate(
 	}
 #endif
 	/* find a available interface name, max 32 interfaces */
-	status = RtmpOSNetDevRequestName(MC_RowID, pIoctlIF, pNetDev, pNamePrefix, devNum);
+	status = RtmpOSNetDevRequestName(MC_RowID, pIoctlIF, pNetDev, pNamePrefix, name_start);
 	if (status != NDIS_STATUS_SUCCESS) {
 		/* error! no any available ra name can be used! */
 		DBGPRINT(RT_DEBUG_ERROR,
@@ -2450,6 +2456,8 @@ void OS_CLEAR_BIT(int bit, unsigned long *flags)
 
 void OS_LOAD_CODE_FROM_BIN(unsigned char **image, char *bin_name, void *inf_dev, UINT32 *code_len)
 {
+#if IS_ENABLED(CONFIG_FW_LOADER)
+
 	struct device *dev;
 	const struct firmware *fw_entry;
 
@@ -2469,10 +2477,19 @@ void OS_LOAD_CODE_FROM_BIN(unsigned char **image, char *bin_name, void *inf_dev,
 	*code_len = fw_entry->size;
 
 	release_firmware(fw_entry);
+
+#else
+	/* Built-in MCU images remain supported; unavailable file loading fails closed. */
+	*image = NULL;
+	*code_len = 0;
+	DBGPRINT(RT_DEBUG_ERROR, ("%s: file firmware loading unavailable on TRT29\n", __FUNCTION__));
+#endif
 }
 
 void os_load_code_from_bin(void *pAd, unsigned char **image, char *bin_name, UINT32 *code_len)
 {
+#if IS_ENABLED(CONFIG_FW_LOADER)
+
 	struct device *dev;
 	const struct firmware *fw_entry;
 	dev = rtmp_get_dev(pAd);
@@ -2486,6 +2503,13 @@ void os_load_code_from_bin(void *pAd, unsigned char **image, char *bin_name, UIN
 	memcpy(*image, fw_entry->data, fw_entry->size);
 	*code_len = fw_entry->size;
 	release_firmware(fw_entry);
+
+#else
+	/* Built-in MCU images remain supported; unavailable file loading fails closed. */
+	*image = NULL;
+	*code_len = 0;
+	DBGPRINT(RT_DEBUG_ERROR, ("%s: file firmware loading unavailable on TRT29\n", __FUNCTION__));
+#endif
 }
 
 
@@ -4615,3 +4639,14 @@ VOID RtmpOsTaskWakeUp(RTMP_OS_TASK *pTask)
 
 #endif /* OS_ABL_FUNC_SUPPORT */
 
+
+/* Preserve the stock 5 GHz module's opaque cross-band WPS ABI. */
+UINT32 WscDualbandSelect[26];
+EXPORT_SYMBOL(WscDualbandSelect);
+
+UINT32 *WscGlobalSelectSet(UINT32 bits)
+{
+    WscDualbandSelect[1] |= bits;
+    return WscDualbandSelect;
+}
+EXPORT_SYMBOL(WscGlobalSelectSet);

@@ -1451,10 +1451,7 @@ VOID ap_cmm_peer_assoc_req_action(
 #ifdef WSC_AP_SUPPORT
 	WSC_CTRL *wsc_ctrl;
 #endif /* WSC_AP_SUPPORT */
-#ifdef RT_BIG_ENDIAN
-	UINT32 tmp_1;
-	UINT64 tmp_2;
-#endif /*RT_BIG_ENDIAN*/
+
 #ifdef MBO_SUPPORT
 	BOOLEAN bMboReject = FALSE;
 #endif/* MBO_SUPPORT */

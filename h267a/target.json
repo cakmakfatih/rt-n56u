@@ -1,0 +1,8 @@
+{
+  "target": "ZTE ZXHN H267A V1.0.1_TRT29",
+  "upstream_commit": "23387b278a7cf728748af606760758f5d59d1451",
+  "kernel": "2.6.36 with measured CSP network ABI overlay",
+  "compiler": "MIPS big-endian GCC 4.3.6",
+  "private_calibration_required": true,
+  "guide": "Kept outside this repository as requested"
+}

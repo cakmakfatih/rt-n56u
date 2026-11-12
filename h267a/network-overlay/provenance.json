@@ -1,0 +1,21 @@
+{
+  "linux_network_headers": {
+    "source": "https://cdn.kernel.org/pub/linux/kernel/v3.x/linux-3.4.tar.xz",
+    "sha256": "ff3dee6a855873d12487a6f4070ec2f7996d073019171361c955639664baa0c6",
+    "adaptation": "Network layout compatibility edits for the TRT29 ABI; existing license and copyright notices are retained."
+  },
+  "linux_device_header": {
+    "source": "https://static.tp-link.com/upload/gpl-code/2024/202405/20240509/Archer_VR300_EU_2.0.tar.gz",
+    "sha256": "c2ebbce14af609d27ee9c3053be858e5d521ae1fe2d8ad7c32f538a48fc1ad7d",
+    "archive_directory": "Archer_VR300_EU_2.0/econet_bba_1_5_entry_fe/mtk/linux-2.6.36",
+    "file": "include/linux/device.h",
+    "adaptation": "Uses the matching 2.6.36 struct device layout."
+  },
+  "local_compatibility_wrappers": [
+    "include/linux/atomic.h",
+    "include/linux/static_key.h",
+    "include/linux/pm_wakeup.h",
+    "trt29_network_config.h"
+  ],
+  "license": "GPL-2.0; individual files retain their original license terms."
+}

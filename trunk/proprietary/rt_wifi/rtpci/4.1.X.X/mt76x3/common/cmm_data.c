@@ -631,12 +631,10 @@ UINT32 parse_rx_packet_type(RTMP_ADAPTER *ad, RX_BLK *rx_blk, VOID *rx_packet)
 			struct rxd_base_struct *rx_base;
 			TMAC_TXD_L *txd_l = (TMAC_TXD_L *)(GET_OS_PKT_DATAPTR(rx_packet));
             TMAC_TXD_1 *txd_1 = &txd_l->txd_1;
-#ifdef RT_BIG_ENDIAN
-		*(((UINT32 *)txd_1)) = SWAP32(*(((UINT32 *)txd_1)));
-#endif /* RT_BIG_ENDIAN */
 
-            UCHAR padding = txd_1->hdr_pad & 0x03;
-            UCHAR hdr_info = txd_1->hdr_info*2;
+
+            UCHAR padding;
+            UCHAR hdr_info;
             UCHAR *da, *sa;
             STA_TR_ENTRY *tr_entry;
 			MAC_TABLE_ENTRY *pEntry;
@@ -648,6 +646,11 @@ UINT32 parse_rx_packet_type(RTMP_ADAPTER *ad, RX_BLK *rx_blk, VOID *rx_packet)
 			UCHAR ac_idx = 0;
 #endif /* UAPSD_SUPPORT */
 
+            #ifdef RT_BIG_ENDIAN
+		*(((UINT32 *)txd_1)) = SWAP32(*(((UINT32 *)txd_1)));
+#endif /* RT_BIG_ENDIAN */
+            padding = txd_1->hdr_pad & 0x03;
+            hdr_info = txd_1->hdr_info*2;
             tr_entry = &ad->MacTab.tr_entry[txd_1->wlan_idx];
 			pEntry = &ad->MacTab.Content[txd_1->wlan_idx];
 		rx_base = (struct rxd_base_struct *)rxd_0;

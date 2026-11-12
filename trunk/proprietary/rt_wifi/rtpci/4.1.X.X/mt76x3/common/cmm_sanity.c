@@ -449,8 +449,8 @@ BOOLEAN PeerBeaconAndProbeRspSanity_Old(
 				*(USHORT *)(&pHtCapability->ExtHtCapInfo) = cpu2le16(*(USHORT *)(&pHtCapability->ExtHtCapInfo));
 #endif /* UNALIGNMENT_SUPPORT */
 #ifdef RT_BIG_ENDIAN
-				*(UINT32 *)(&pHtCapability.TxBFCap) =
-							le2cpu32(*(UINT32 *)(&pHtCapability.TxBFCap));
+				*(UINT32 *)(&pHtCapability->TxBFCap) =
+							le2cpu32(*(UINT32 *)(&pHtCapability->TxBFCap));
 #endif
 
 

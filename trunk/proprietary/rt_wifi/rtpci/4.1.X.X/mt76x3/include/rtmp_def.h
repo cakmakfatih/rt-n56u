@@ -2062,8 +2062,8 @@ typedef struct _WIFI_NODE_TYPE {
 #define INF_MBSSID_DEV_NAME		"wlani"
 #else
 #ifdef HE_BD_CFG80211_SUPPORT 
-#define INF_MAIN_DEV_NAME		"ra"
-#define INF_MBSSID_DEV_NAME		"ra"
+#define INF_MAIN_DEV_NAME		"wlan"
+#define INF_MBSSID_DEV_NAME		"wlan"
 #else
 #define INF_MAIN_DEV_NAME		"wlan"
 #define INF_MBSSID_DEV_NAME		"wlan"
@@ -2076,8 +2076,8 @@ typedef struct _WIFI_NODE_TYPE {
 #define INF_MAIN_DEV_NAME		"rai"
 #define INF_MBSSID_DEV_NAME		"rai"
 #else
-#define INF_MAIN_DEV_NAME		"ra"
-#define INF_MBSSID_DEV_NAME		"ra"
+#define INF_MAIN_DEV_NAME		"wlan"
+#define INF_MBSSID_DEV_NAME		"wlan"
 #endif
 #endif /* ANDROID_SUPPORT */
 
@@ -2090,7 +2090,7 @@ typedef struct _WIFI_NODE_TYPE {
 #define INF_MONITOR_DEV_NAME	"moni"
 #else
 #define INF_WDS_DEV_NAME		"wds"
-#define INF_APCLI_DEV_NAME		"apcli"
+#define INF_APCLI_DEV_NAME		"wlan"
 #define INF_MESH_DEV_NAME		"mesh"
 #define INF_P2P_DEV_NAME		"p2p"
 #define INF_MONITOR_DEV_NAME	"mon"

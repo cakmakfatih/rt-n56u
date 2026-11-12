@@ -104,7 +104,8 @@ PNDIS_PACKET RTMP_AllocateRxPacketBuffer(
 {
 	struct sk_buff *pkt;
 #ifdef BB_SOC
-    pkt = skbmgr_dev_alloc_skb4k();
+    /* TRT29 exports dev_alloc_skb; the donor-specific packet pool is absent. */
+    pkt = dev_alloc_skb(Length);
 #else
 /*	pkt = dev_alloc_skb(Length); */
 	DEV_ALLOC_SKB(pReserved, pkt, Length);

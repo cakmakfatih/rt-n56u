@@ -1,0 +1,20 @@
+{
+  "source": "ZTE ZXHN H267A TRT29 radio profile defaults, sanitized for source distribution.",
+  "files": {
+    "mt7603.dat": "2.4 GHz MT7603 AP/APCLI template",
+    "mt7612.dat": "Legacy 5 GHz AP template"
+  },
+  "sanitization": [
+    "SSID1, APCLI SSID and WPA keys are generic placeholders replaced from current GUI settings by wireless-bridge.sh.",
+    "MacAddress is intentionally empty; no device MAC address is included.",
+    "APCLI BSSID is zero and HideSSID is disabled."
+  ],
+  "private_packaging_requirement": "Fill each MacAddress with your own stock radio MAC before packing to reproduce the native-tested profile form.",
+  "native_validation_limit": "Empty-profile MAC fallback is inferred from the new 2.4 GHz source; blank-profile behavior of the legacy 5 GHz module is untested.",
+  "retained_defaults": "Other radio settings remain vendor defaults, including the unused WPA2-PSK profile own_ip_addr default; these are not captures of an upstream network.",
+  "excluded": [
+    "Device calibration",
+    "Device credentials",
+    "Firmware or driver binaries"
+  ]
+}

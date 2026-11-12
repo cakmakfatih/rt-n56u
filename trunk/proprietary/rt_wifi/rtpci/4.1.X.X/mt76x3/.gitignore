@@ -1,0 +1,6 @@
+include/h267a_active_eeprom.h
+*.o
+*.ko
+*.cmd
+*.mod.c
+Module.symvers

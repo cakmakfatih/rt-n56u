@@ -26,6 +26,7 @@
 	Name		Date			Modification logs
 */
 #include "rt_config.h"
+#include "h267a_active_eeprom.h"
 
 struct chip_map{
 	UINT32 ChipVersion;
@@ -694,10 +695,14 @@ INT RtmpChipOpsEepromHook(RTMP_ADAPTER *pAd, INT infType,INT forceMode)
 		return -1;
 
 #ifdef RTMP_EFUSE_SUPPORT
-	efuse_probe(pAd);
+	pAd->bUseEfuse = FALSE;
 #endif /* RTMP_EFUSE_SUPPORT */
 
 	rtmp_eeprom_of_platform(pAd);
+	/* Keep every EEPROM read/write callback in RAM-backed BIN mode. */
+	pAd->E2pAccessMode = E2P_BIN_MODE;
+	pAd->eeprom_type = EEPROM_FLASH;
+	forceMode = E2P_BIN_MODE;
 
 	if(forceMode != E2P_NONE && forceMode < NUM_OF_E2P_MODE)
 	{
@@ -890,174 +895,18 @@ INT rtmp_ee_bin_write16(
 INT rtmp_ee_load_from_bin(
 	IN PRTMP_ADAPTER 	pAd)
 {
-	RTMP_STRING *src = NULL;
-	INT ret_val;
-	RTMP_OS_FD srcf;
-	RTMP_OS_FS_INFO osFSInfo;
-
-#ifdef RT_SOC_SUPPORT
-#ifdef MULTIPLE_CARD_SUPPORT
-	RTMP_STRING bin_file_path[128];
-	RTMP_STRING *bin_file_name = NULL;
-	UINT32 chip_ver = (pAd->MACVersion >> 16);
-
-	if (rtmp_get_default_bin_file_by_chip(pAd, chip_ver, &bin_file_name) == TRUE)
-	{
-		if (pAd->MC_RowID > 0)
-			sprintf(bin_file_path, "%s%s", EEPROM_2ND_FILE_DIR, bin_file_name);
-		else
-			sprintf(bin_file_path, "%s%s", EEPROM_1ST_FILE_DIR, bin_file_name);
-
-		src = bin_file_path;
-	}
-	else
-#endif /* MULTIPLE_CARD_SUPPORT */
-#endif /* RT_SOC_SUPPORT */
-		src = BIN_FILE_PATH;
-
-	DBGPRINT(RT_DEBUG_TRACE, ("%s::FileName=%s\n", __FUNCTION__, src));
-
-	RtmpOSFSInfoChange(&osFSInfo, TRUE);
-
-	if (src && *src)
-	{
-		srcf = RtmpOSFileOpen(src, O_RDONLY, 0);
-		if (IS_FILE_OPEN_ERR(srcf))
-		{
-			DBGPRINT(RT_DEBUG_ERROR, ("%s::Error opening %s\n", __FUNCTION__, src));
-			goto error;
-		}
-		else
-		{
-			NdisZeroMemory(pAd->EEPROMImage, MAX_EEPROM_BIN_FILE_SIZE);
-			ret_val = RtmpOSFileRead(srcf, (RTMP_STRING *)pAd->EEPROMImage, MAX_EEPROM_BIN_FILE_SIZE);
-
-			if (ret_val > 0)
-				ret_val = NDIS_STATUS_SUCCESS;
-			else
-				DBGPRINT(RT_DEBUG_ERROR, ("%s::Read file \"%s\" failed(errCode=%d)!\n", __FUNCTION__, src, ret_val));
-      		}
-	}
-	else
-	{
-		DBGPRINT(RT_DEBUG_ERROR, ("%s::Error src or srcf is null\n", __FUNCTION__));
-		goto error;
-	}
-
-	ret_val = RtmpOSFileClose(srcf);
-
-	if (ret_val)
-		DBGPRINT(RT_DEBUG_ERROR, ("%s::Error %d closing %s\n", __FUNCTION__, -ret_val, src));
-
-	RtmpOSFSInfoChange(&osFSInfo, FALSE);
-	return TRUE;
-
-error:
-	if (pAd->chipCap.EEPROM_DEFAULT_BIN != NULL)
-	{
-		NdisMoveMemory(pAd->EEPROMImage, pAd->chipCap.EEPROM_DEFAULT_BIN,
-		pAd->chipCap.EEPROM_DEFAULT_BIN_SIZE > MAX_EEPROM_BUFFER_SIZE?MAX_EEPROM_BUFFER_SIZE:pAd->chipCap.EEPROM_DEFAULT_BIN_SIZE);
-		DBGPRINT(RT_DEBUG_TRACE, ("Load EEPROM Buffer from default BIN.\n"));
-	}
-
-	return FALSE;
+    /* The captured active image already includes this board's calibration. */
+    memset(pAd->EEPROMImage, 0xff, sizeof(pAd->EEPROMImage));
+    NdisMoveMemory(pAd->EEPROMImage, h267a_active_eeprom, sizeof(h267a_active_eeprom));
+    return TRUE;
 }
 
 
 INT rtmp_ee_write_to_bin(
 	IN PRTMP_ADAPTER 	pAd)
 {
-	RTMP_STRING *src = NULL;
-	INT ret_val;
-	RTMP_OS_FD srcf;
-	RTMP_OS_FS_INFO osFSInfo;
-	const INT PCI_EFUSE_SIZE = 10;
-	UCHAR pci_pm[PCI_EFUSE_SIZE];
-	UCHAR pci_efuse[PCI_EFUSE_SIZE];
-	INT i = 0;
-
-#ifdef RT_SOC_SUPPORT
-#ifdef MULTIPLE_CARD_SUPPORT
-	RTMP_STRING bin_file_path[128];
-	RTMP_STRING *bin_file_name = NULL;
-	UINT32 chip_ver = (pAd->MACVersion >> 16);
-
-	if (rtmp_get_default_bin_file_by_chip(pAd, chip_ver, &bin_file_name) == TRUE)
-	{
-		if (pAd->MC_RowID > 0)
-			sprintf(bin_file_path, "%s%s", EEPROM_2ND_FILE_DIR, bin_file_name);
-		else
-			sprintf(bin_file_path, "%s%s", EEPROM_1ST_FILE_DIR, bin_file_name);
-
-		src = bin_file_path;
-	}
-	else
-#endif /* MULTIPLE_CARD_SUPPORT */
-#endif /* RT_SOC_SUPPORT */
-		src = BIN_FILE_PATH;
-
-	DBGPRINT(RT_DEBUG_TRACE, ("%s::FileName=%s\n", __FUNCTION__, src));
-
-	RtmpOSFSInfoChange(&osFSInfo, TRUE);
-
-	if (src && *src)
-	{
-		srcf = RtmpOSFileOpen(src, O_WRONLY|O_CREAT, 0);
-
-		if (IS_FILE_OPEN_ERR(srcf))
-		{
-			DBGPRINT(RT_DEBUG_ERROR, ("%s::Error opening %s\n", __FUNCTION__, src));
-			return FALSE;
-		}
-		else
-			RtmpOSFileWrite(srcf, (RTMP_STRING *)pAd->EEPROMImage, MAX_EEPROM_BIN_FILE_SIZE);
-	}
-	else
-	{
-		DBGPRINT(RT_DEBUG_ERROR, ("%s::Error src or srcf is null\n", __FUNCTION__));
-		return FALSE;
-	}
-
-	ret_val = RtmpOSFileClose(srcf);
-
-	if (ret_val)
-		DBGPRINT(RT_DEBUG_ERROR, ("%s::Error %d closing %s\n", __FUNCTION__, -ret_val, src));
-
-	RtmpOSFSInfoChange(&osFSInfo, FALSE);
-#ifdef RTMP_MAC_PCI
-#ifdef MT7603
-	NdisZeroMemory(pci_pm, PCI_EFUSE_SIZE);
-	NdisZeroMemory(pci_efuse, PCI_EFUSE_SIZE);
-	/* 0x26 ~ 0x2F */
-	for(i=0;i<PCI_EFUSE_SIZE;i+=2){
-		UINT16 buf_reg = 0;
-		buf_reg |= pAd->EEPROMImage[0x26+i+1];
-		buf_reg <<= 8;
-		buf_reg |= pAd->EEPROMImage[0x26+i];
-		buf_reg = le2cpu16 (buf_reg);
-      	NdisMoveMemory(&pci_pm[i], &buf_reg, 2);
-	}
-	eFuseRead(pAd, 0x26, (USHORT *)pci_efuse, PCI_EFUSE_SIZE);
-
-	DBGPRINT(RT_DEBUG_TRACE, ("PCIE_PM: "));
-	for(i=0;i<PCI_EFUSE_SIZE;i++){
-		DBGPRINT(RT_DEBUG_TRACE, ("%x ",pci_pm[i]));
-	}
-	DBGPRINT(RT_DEBUG_TRACE, ("\n"));
-	DBGPRINT(RT_DEBUG_TRACE, ("PCIE_EFUSE: "));
-	for(i=0;i<PCI_EFUSE_SIZE;i++){
-		DBGPRINT(RT_DEBUG_TRACE, ("%x ",pci_efuse[i]));
-	}
-	DBGPRINT(RT_DEBUG_TRACE, ("\n"));
-	if (!NdisEqualMemory(pci_pm, pci_efuse, PCI_EFUSE_SIZE)){
-		eFuseWrite(pAd, 0x26, (USHORT *)pci_pm, PCI_EFUSE_SIZE);
-		DBGPRINT(RT_DEBUG_TRACE, ("%s, write pci efuse val  to efuse\n", __FUNCTION__));
-	}else{
-		DBGPRINT(RT_DEBUG_TRACE, ("%s, 0x26~0x2F efuse and bin file has same val\n", __FUNCTION__));
-	}
-#endif	/* MT7603 */
-#endif /* RTMP_MAC_PCI */
-	return TRUE;
+    DBGPRINT(RT_DEBUG_ERROR, ("TRT29 port: persistent calibration writes disabled\n"));
+    return FALSE;
 }
 
 
