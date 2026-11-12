@@ -1,6 +1,6 @@
 # ZTE ZXHN H267A TRT29 wireless bridge: reproduction guide
 
-**Status: permanent installation and normal reboot verified, 2026-11-12.** This guide concerns the user-owned **ZTE ZXHN H267A, hardware V1.0.8, firmware V1.0.1_TRT29**. The modified image booted successfully from bank 1 after the OEM flash operation, then passed a separate normal H267A reboot. Both checks found the replacement 2.4 GHz driver, original 5 GHz driver, connected wireless uplink, both intended AP SSIDs, all four LAN ports in the bridge, and Internet reachability (3/3 replies). Private GUI DB-dump cleanup was verified separately during native startup and first permanent boot. The main PC kept its direct upstream connection throughout. A previous phone Internet test passed, and the owner subsequently confirmed Internet access from an Ethernet-connected client. Separate phone tests on both bands remain untested. The published source revision is pinned in sections 2 and 7.
+**Status: permanent installation and normal reboot verified, 2026-11-12.** This guide concerns the user-owned **ZTE ZXHN H267A, hardware V1.0.8, firmware V1.0.1_TRT29**. The modified image booted successfully from bank 1 after the OEM flash operation, then passed a separate normal H267A reboot. Both checks found the replacement 2.4 GHz driver, original 5 GHz driver, connected wireless uplink, both intended AP SSIDs, all four LAN ports in the bridge, and Internet reachability (3/3 replies). Private GUI DB-dump cleanup was verified separately during native startup and first permanent boot. The main PC kept its direct upstream connection throughout. A previous phone Internet test passed, and Internet access from an Ethernet-connected client was subsequently confirmed. Separate phone tests on both bands remain untested. The published source revision is pinned in sections 2 and 7.
 
 This guide is published with the source port and uses generic placeholders for each owner's private inputs. It deliberately contains no real upstream router brand/model, SSID, password, device MAC address, account credential, or private configuration XML. Project documentation is English; the placeholders below are values to record privately.
 
@@ -8,7 +8,7 @@ This guide is published with the source port and uses generic placeholders for e
 
 The H267A joins an upstream access point over **2.4 GHz APCLI** and supplies its connection to the H267A LAN bridge, its 2.4 GHz AP, and its existing 5 GHz AP. The 5 GHz radio remains an AP using the OEM `mt7612e_ap` driver. It is not a 5 GHz wireless uplink.
 
-All four H267A LAN interfaces were verified as bridge members after both permanent boots. Temporary tests isolated the inter-router cable/`eth0` path to prevent a bridge loop. The owner subsequently confirmed Internet access from an Ethernet-connected client. The specific LAN port and separate tests of every physical port were not recorded; all four interfaces were verified as bridge members.
+All four H267A LAN interfaces were verified as bridge members after both permanent boots. Temporary tests isolated the inter-router cable/`eth0` path to prevent a bridge loop. Internet access from an Ethernet-connected client was subsequently confirmed. The specific LAN port and separate tests of every physical port were not recorded; all four interfaces were verified as bridge members.
 
 Using the same SSID and password can let a client choose between access points. It does not establish mesh, coordinated roaming, 802.11r, or seamless handover. APCLI plus the driver's address translation is not a promise that every Layer 2 protocol works transparently.
 
@@ -26,7 +26,7 @@ The installation evidence and its limits are:
 | Persistent first boot | OEM flash followed by bank 1 boot, valid bank status, startup ready, both radio drivers/AP names, connected uplink, all LAN bridge members, and Internet 3/3 passed. |
 | Normal reboot | `/bin/busybox reboot`, then the same bank 1/startup/radio/uplink/bridge/Internet checks passed again. |
 | Image checks | Original kernel payload preserved; CRC/decrypt/capacity checks and full 1,422-entry filesystem manifest roundtrip passed; complete OTA RAM read-back matched before flashing. |
-| Client testing | Previous phone Internet test passed; the owner subsequently confirmed Ethernet-client Internet access. Separate tests on every physical LAN port, phone tests on each band, and forced upstream interruption are not claimed. |
+| Client testing | Previous phone Internet test passed; Ethernet-client Internet access was subsequently confirmed. Separate tests on every physical LAN port, phone tests on each band, and forced upstream interruption are not claimed. |
 | Recovery | Private stock/config backups retained; hot stock restoration passed. Manual boot-bank selection and failed-image bootloader recovery remain unproven. Do not infer their commands from another ZTE model. |
 
 The instructions below reproduce the tested software path with the owning unit's firmware/calibration. Remaining limits are reported as limits, not prerequisites requiring the main PC's cable to be moved or the upstream router to be changed.
@@ -353,7 +353,7 @@ With the inter-router cable **physically absent**, disable mobile data on a test
 3. Reachability of the H267A management address and upstream gateway.
 4. DNS lookup and an actual Internet page/load, with mobile data still off.
 5. When available later, repeat on the other H267A Wi-Fi band.
-6. Test an Ethernet client on the H267A; the owner has confirmed Internet access over Ethernet on the installed unit. For a full per-port check, test each LAN port separately. Keep the main PC's direct upstream cable in place.
+6. Test an Ethernet client on the H267A; Internet access over Ethernet on the installed unit has been confirmed. For a full per-port check, test each LAN port separately. Keep the main PC's direct upstream cable in place.
 7. In a later planned test, verify recovery after a brief upstream wireless interruption without changing/rebooting the upstream router.
 
 The user confirmed the wireless-only phone Internet test during this investigation. The corrected driver's later full bridge run retained both radio interfaces, reached the upstream gateway, and received **3/3 replies from an Internet address**, then fully restored stock after teardown. Permanent first boot and normal reboot separately passed their startup/bridge/Internet checks. These results do not establish the remaining per-band/per-LAN-port client matrix or long-duration stability.
@@ -540,7 +540,7 @@ The completion record for **2026-11-12** is:
 | Permanent boots | First boot and separate normal reboot both verified current bank 1 with valid status, startup ready, both drivers/AP names, `wlan2` connected, all four LAN members and Internet 3/3. |
 | Credentials | Both runtime AP key fields matched saved GUI settings and both SSIDs were visible; private DB export removed. No credential values are recorded here. |
 | Main Internet | Main PC stayed directly wired upstream; TCP Internet checks stayed open. |
-| Ethernet client | The owner confirmed Internet access over an Ethernet cable after permanent installation. The specific port and a complete per-port test were not recorded. |
+| Ethernet client | Internet access over an Ethernet cable was confirmed after permanent installation. The specific port and a complete per-port test were not recorded. |
 | Remaining untested | Separate physical tests of every LAN port, a new phone test on each band, a real upstream router/credential swap, forced reconnect, throughput/long-duration stability, multicast/IPv6/roaming, manual bank selection and failed-image recovery. |
 
 The installed local filename retains the historical suffix `h267a-trt29-wireless-bridge-direct-gui-unflashed.bin`; that suffix does **not** describe its current state. The matching image was subsequently written and passed both permanent boot checks. Conversely, older reports with `flash_written: false` describe their earlier build stage and are superseded by the permanent-boot evidence above.
